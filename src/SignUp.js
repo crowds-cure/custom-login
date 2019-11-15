@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import auth0 from 'auth0-js';
+import './SignUp.css';
 
 const SignUp = () => {
   const formik = useFormik({
@@ -76,7 +77,7 @@ const SignUp = () => {
         onChange={formik.handleChange}
         value={formik.values.email}
       />
-      <button type="submit">Submit</button>
+      <button className="btn" type="submit">Submit</button>
     </form>
   );
 };
