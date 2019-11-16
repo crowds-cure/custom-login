@@ -12,8 +12,6 @@ $color-primary: #ABA194;
 body {
     font-family: $font-family;
     font-size: $font-size;
-    background: purple;
-    color: white;
     height: 100vh
 }
 
@@ -24,19 +22,14 @@ form {
     overflow: hidden;
 }
 
-form > input {
+form > input[type=password],input[type=email],input[type=text] {
     display: block;
     width: 100%;
     padding: 20px;
     font-family: $font-family;
     -webkit-appearance: none;
-    border: 0;
     outline: 0;
     transition: 0.3s;
-    
-    &:focus {
-        background: darken(#fff, 3%);
-    }
 }
 
 .btn {
@@ -44,14 +37,7 @@ form > input {
     width: 100%;
     padding: 20px;
     font-family: $font-family;
-    -webkit-appearance: none;
     outline: 0;
-    border: 0;
     color: black;
-    background: $color-primary;
     transition: 0.3s;
-    
-    &:hover {
-        background: darken($color-primary, 5%);
-    }
 }
