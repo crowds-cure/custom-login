@@ -14,12 +14,12 @@ class CustomSelect extends Component {
 
   render() {
     return (
-      <div style={{ margin: '1rem 0' }}>
-        <label htmlFor="color">{this.props.label}</label>
+      <div style={{ margin: '1rem 0', color: 'black'}}>
+        <label htmlFor={this.props.fieldName}>{this.props.label}</label>
         <Select
-          id="color"
+          id={this.props.fieldName}
           options={this.props.options}
-          multi={true}
+          multi={this.props.multi}
           onChange={this.handleChange}
           onBlur={this.handleBlur}
           value={this.props.value}

@@ -19,7 +19,7 @@ const RadioButton = ({
         name={name}
         id={id}
         type="radio"
-        value={id} // could be something else for output?
+        value={id}
         checked={id === value}
         onChange={onChange}
         onBlur={onBlur}
