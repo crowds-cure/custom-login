@@ -12,20 +12,33 @@ const formikEnhancer = withFormik({
   mapPropsToValues: props => ({
     password: '',
   }),
-  handleSubmit: (values, { setSubmitting }) => {
+  handleSubmit: (values, { props, setSubmitting }) => {
     const { email, password } = values;
 
-    // Initialize client
-    const webAuth = new auth0.WebAuth({
-      domain: 'crowds-cure.auth0.com',
-      clientID: 'z5cXMPTxeFOdB3i4xRA8JyhTonQmqMKM'
-    });
+    const { config } = props;
+
+    const params = Object.assign({
+        /* additional configuration needed for use of custom domains */
+        overrides: {
+          __tenant: config.auth0Tenant,
+          __token_issuer: config.authorizationServer.issuer,
+          __jwks_uri: `${config.authorizationServer.issuer}.well-known/jwks.json`
+        },
+        //
+        domain: config.auth0Domain,
+        clientID: config.clientID,
+        redirectUri: config.callbackURL,
+        responseType: 'code'
+      }, config.internalOptions);
+
+        // Initialize client
+    const webAuth = new auth0.WebAuth(params);
+
+    window.webAuth = webAuth;
 
     const options = { 
       realm: "Username-Password-Authentication",
-      connection: 'Username-Password-Authentication',
       password,
-      responseType: 'token id_token',
     };
 
     const isEmail = email.includes('@');
@@ -59,6 +72,7 @@ const SignInForm = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h2>Sign In</h2>
       <Field name="email">
         {({ field, form, meta }) => (
           <div>

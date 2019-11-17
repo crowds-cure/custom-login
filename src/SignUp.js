@@ -56,7 +56,7 @@ const formikEnhancer = withFormik({
     consent: false,
     username: randomNames[0] 
   }),
-  handleSubmit: (values, { setSubmitting }) => {
+  handleSubmit: (values, { props, setSubmitting }) => {
     console.log(JSON.stringify(values, null, 2));
     const { email,
       password,
@@ -69,18 +69,30 @@ const formikEnhancer = withFormik({
       username,
       consent } = values;
 
-    // Initialize client
-    const webAuth = new auth0.WebAuth({
-      domain: 'crowds-cure.auth0.com',
-      clientID: 'z5cXMPTxeFOdB3i4xRA8JyhTonQmqMKM'
-    });
+    const { config } = props;
+
+        const params = Object.assign({
+        /* additional configuration needed for use of custom domains */
+        overrides: {
+          __tenant: config.auth0Tenant,
+          __token_issuer: config.authorizationServer.issuer,
+          __jwks_uri: `${config.authorizationServer.issuer}.well-known/jwks.json`
+        },
+        //
+        domain: config.auth0Domain,
+        clientID: config.clientID,
+        redirectUri: config.callbackURL,
+        responseType: 'code'
+      }, config.internalOptions);
+
+        // Initialize client
+    const webAuth = new auth0.WebAuth(params);
     
-    webAuth.signupAndAuthorize({ 
-      connection: 'Username-Password-Authentication',
+    const options = { 
+      connection: "Username-Password-Authentication",
       email, 
       password,
       username,
-      responseType: 'token id_token',
       given_name: firstName,
       family_name: lastName,
       name: `${firstName} ${lastName}`,
@@ -93,15 +105,13 @@ const formikEnhancer = withFormik({
         notificationOfDataRelease: notificationOfDataRelease.toString(),
         consent: consent.toString()
       }
-    }, function (err) { 
+    };
+
+    webAuth.redirect.signupAndLogin(options, function (err) { 
       if (err) {
         alert(`Something went wrong: ${err.message}`);
         throw new Error(err.message); 
       }
-
-      console.warn('Done! Redirect?');
-
-      window.location = 'https://cancer.crowds-cure.org/'
     });
     setSubmitting(false);
   },
@@ -123,6 +133,7 @@ const SignUpForm = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h2>Sign Up</h2>
       <Field name="firstName">
         {({ field, form, meta }) => (
           <div>
