@@ -47,7 +47,6 @@ const formikEnhancer = withFormik({
     } else {
         options.username = email;
     }
-
     
     webAuth.login(options, function (err) { 
       if (err) {

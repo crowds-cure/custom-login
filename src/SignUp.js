@@ -71,21 +71,21 @@ const formikEnhancer = withFormik({
 
     const { config } = props;
 
-        const params = Object.assign({
-        /* additional configuration needed for use of custom domains */
-        overrides: {
-          __tenant: config.auth0Tenant,
-          __token_issuer: config.authorizationServer.issuer,
-          __jwks_uri: `${config.authorizationServer.issuer}.well-known/jwks.json`
-        },
-        //
-        domain: config.auth0Domain,
-        clientID: config.clientID,
-        redirectUri: config.callbackURL,
-        responseType: 'code'
-      }, config.internalOptions);
+    const params = Object.assign({
+      /* additional configuration needed for use of custom domains */
+      overrides: {
+        __tenant: config.auth0Tenant,
+        __token_issuer: config.authorizationServer.issuer,
+        __jwks_uri: `${config.authorizationServer.issuer}.well-known/jwks.json`
+      },
+      //
+      domain: config.auth0Domain,
+      clientID: config.clientID,
+      redirectUri: config.callbackURL,
+      responseType: 'code'
+    }, config.internalOptions);
 
-        // Initialize client
+    // Initialize client
     const webAuth = new auth0.WebAuth(params);
     
     const options = { 
@@ -199,6 +199,7 @@ const SignUpForm = (props) => {
         onBlur={setFieldTouched}
         error={errors.profession}
         touched={touched.profession}
+        required={true}
       />
       <RadioButtonGroup
         id="experience"
@@ -222,6 +223,7 @@ const SignUpForm = (props) => {
         fieldName={'residencyProgram'}
         label={'Hospital or Country'}
         options={residencyProgram}
+        required={true}
         onChange={setFieldValue}
         onBlur={setFieldTouched}
         error={errors.residencyProgram}
@@ -241,6 +243,7 @@ const SignUpForm = (props) => {
             component={RadioButton}
             name="username"
             label={name}
+            required={true}
           />  
         ))}
       </RadioButtonGroup>
