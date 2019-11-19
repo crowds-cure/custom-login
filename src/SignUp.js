@@ -128,7 +128,6 @@ const SignUpForm = (props) => {
   const {
     values,
     touched,
-    dirty,
     errors,
     handleSubmit,
     setFieldValue,
