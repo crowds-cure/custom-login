@@ -14,13 +14,24 @@ try {
 
 console.warn(JSON.stringify(config, null, 2));
 
+function getParameterByName(name) {
+  var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);	
+  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));	
+}
+
+var hash = getParameterByName('hash');
+var initialPage = 'login';
+if (hash && hash.toLowerCase() === '#signup') {	
+  initialPage = 'signup';	
+}
+
 class App extends React.Component {
 
   constructor() {
     super();
 
     this.state = {
-      currentPage: 'login'
+      currentPage: initialPage
     };
 
     this.togglePage = this.togglePage.bind(this);
