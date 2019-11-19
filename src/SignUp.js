@@ -43,6 +43,7 @@ const formikEnhancer = withFormik({
     password: Yup.string()
       .required('Password is required!'),
     passwordConfirm: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Password confirmation is required!'),
     experience: Yup.string()
       .required('Years of experience is required!'),
