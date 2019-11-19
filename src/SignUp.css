@@ -9,12 +9,12 @@
 }
 
 .SignUp .linkLoginInstead {
-  display: block;
+  display: table;
   font-size: 18px;
   font-weight: normal;
+  margin-left: auto;
   margin-top: 18px;
   text-align: right;
-  width: 100%;
 }
 
 .SignUp form {

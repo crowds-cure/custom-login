@@ -12,34 +12,43 @@ try {
 	console.error(error);
 }
 
-function getParameterByName(name) {
-    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-}
-
-var hash = getParameterByName('hash');
-console.warn('parameter hash is', hash);
-var initialScreen = 'signUp';
-if (hash && hash.toLowerCase() === '#login') {
-    initialScreen = 'login';
-} else if (hash && hash.toLowerCase() === '#signup') {
-    initialScreen = 'signUp';
-}
-
 console.warn(JSON.stringify(config, null, 2));
 
-function App(props) {
-	console.warn(initialScreen);
-  return (
-    <div className="App">
-      <Logo />
-      { initialScreen === 'login' ?
-        <SignIn config={config}/> : 
-        <SignUp config={config}/>
-      }
-      
-    </div>
-  );
+class App extends React.Component {
+
+  constructor() {
+    super();
+
+    this.state = {
+      currentPage: 'login'
+    };
+
+    this.togglePage = this.togglePage.bind(this);
+    this.renderCurrentPage = this.renderCurrentPage.bind(this);
+  }
+
+  togglePage(page) {
+    this.setState({ currentPage: page });
+  }
+
+  renderCurrentPage() {
+    const { currentPage } = this.state;
+    if (currentPage === 'signup') {
+      return <SignUp config={config} togglePage={this.togglePage} />;
+    } else {
+      return <SignIn config={config} togglePage={this.togglePage} />;
+    }
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <Logo />
+        {this.renderCurrentPage()}
+      </div>
+    );
+  }
+
 }
 
 export default App;

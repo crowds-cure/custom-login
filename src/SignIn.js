@@ -67,7 +67,10 @@ const SignInForm = (props) => {
   const {
     handleSubmit,
     isSubmitting,
+    togglePage,
   } = props;
+
+  const redirectToSignUp = () => togglePage('signup');
 
   return (
     <form className="SignIn" onSubmit={handleSubmit}>
@@ -98,9 +101,12 @@ const SignInForm = (props) => {
           </>
         )}
       </Field>
-      <a href="#forgot" className="forgotPassword link">Forgot your password?</a>
+      <button className="forgotPassword link">Forgot your password?</button>
       <div className="actions">
-        <a href="#signup" className="linkSignup link">Create account</a>
+        <button
+          className="linkSignup link"
+          onClick={redirectToSignUp}
+        >Create account</button>
         <button
           type="submit"
           className="btnLogin btn"

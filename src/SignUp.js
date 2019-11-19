@@ -134,12 +134,18 @@ const SignUpForm = (props) => {
     setFieldValue,
     setFieldTouched,
     isSubmitting,
+    togglePage,
   } = props;
+
+  const redirectToLogin = () => togglePage('login');
 
   return (
     <div className="SignUp">
       <h2>Sign up</h2>
-      <a href="#login" className="link linkLoginInstead">Log in instead →</a>
+      <button
+        className="link linkLoginInstead"
+        onClick={redirectToLogin}
+      >Log in instead →</button>
       <form onSubmit={handleSubmit}>
         <div className="section">
           <h3>1. Real name (optional)</h3>
