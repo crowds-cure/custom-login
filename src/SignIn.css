@@ -1,0 +1,45 @@
+.SignIn {
+  margin-top: 70px;
+  max-width: 472px;
+  padding: 28px;
+  width: 100%;
+}
+
+.SignIn h2 {
+  color: #18faff;
+  font-size: 25px;
+  font-weight: 500;
+  height: 60px;
+  line-height: 1.2;
+  margin-bottom: 7px;
+}
+
+.SignIn input {
+  font-size: 18px;
+  margin-bottom: 19px;
+  padding: 0 17px;
+}
+
+.SignIn .forgotPassword {
+  display: none;
+  height: 20px;
+  line-height: 20px;
+}
+
+.SignIn .actions {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 64px;
+}
+
+.SignIn .actions .linkSignup {
+  font-size: 19px;
+  margin-left: 18px;
+  margin-right: 32px;
+}
+
+.SignIn .actions .btnLogin {
+  max-width: 142px;
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
+import Logo from './Logo.js';
 
 // Decode utf8 characters properly
 let config = {};
@@ -31,6 +32,7 @@ function App(props) {
 	console.warn(initialScreen);
   return (
     <div className="App">
+      <Logo />
       { initialScreen === 'login' ?
         <SignIn config={config}/> : 
         <SignUp config={config}/>

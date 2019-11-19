@@ -2,7 +2,7 @@ import React from 'react';
 import { withFormik, Field } from 'formik';
 import auth0 from 'auth0-js';
 import * as Yup from 'yup';
-import './SignUp.css';
+import './SignIn.css';
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
@@ -70,26 +70,24 @@ const SignInForm = (props) => {
   } = props;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Sign In</h2>
+    <form className="SignIn" onSubmit={handleSubmit}>
+      <h2>Log in</h2>
       <Field name="email">
         {({ field, form, meta }) => (
-          <div>
-            <label htmlFor="email">Email</label>
+          <>
             <input type="text"
               {...field}
               required
-              placeholder="Email"
+              placeholder="Username or Email"
               autoComplete="email"/>
             {meta.touched &&
               meta.error && <div className="error">{meta.error}</div>}
-          </div>
+          </>
         )}
       </Field>
       <Field name="password">
         {({ field, form, meta }) => (
-          <div>
-            <label htmlFor="password">Password</label>
+          <>
             <input type="password"
               {...field}
               required
@@ -97,13 +95,18 @@ const SignInForm = (props) => {
               autoComplete="new-password"/>
             {meta.touched &&
               meta.error && <div className="error">{meta.error}</div>}
-          </div>
+          </>
         )}
       </Field>
-      <button
-        type="submit"
-        className="btn"
-        disabled={isSubmitting}>Submit</button>
+      <a href="#forgot" className="forgotPassword link">Forgot your password?</a>
+      <div className="actions">
+        <a href="#signup" className="linkSignup link">Create account</a>
+        <button
+          type="submit"
+          className="btnLogin btn"
+          disabled={isSubmitting}
+        >Log in</button>
+      </div>
     </form>
   );
 };

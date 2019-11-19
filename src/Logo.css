@@ -1,0 +1,9 @@
+.Logo {
+  font-size: 32px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.Logo .highlight {
+  color: #18faff;
+}

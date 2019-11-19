@@ -1,26 +1,92 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background-color: #140046;
+  font-family: 'Work Sans', 'SF Pro Text', 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: 100%;
+  text-align: center;
+  width: 100%;
 }
 
-.App-link {
-  color: #09d3ac;
+.App form {
+  background-color: #472e93;
+  border-radius: 6px;
+  box-shadow: 13px 13px 0 0 #030628;
+  display: block;
 }
 
-div.is-error > fieldset > div.input-feedback {
-  color: red;
+.App form input[type=text],
+.App form input[type=email],
+.App form input[type=password] {
+  background-color: #d8d8d8;
+  border: 0;
+  border-radius: 5px;
+  display: block;
+  height: 45px;
+  outline: 0;
+  width: 100%;
+}
+
+.App .link {
+  color: #18faff;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.App .link:hover {
+  color: #ffffff;
+}
+
+.App .btn {
+  background-color: #00d5ae;
+  border: 0;
+  border-radius: 9px;
+  color: #100e44;
+  cursor: pointer;
+  display: block;
+  font-size: 19px;
+  font-weight: 600;
+  height: 53px;
+  transition: background-color .3s ease;
+  width: 100%;
+}
+
+.App .btn:hover {
+  background-color: #ffffff;
+}
+
+form .error {
+  color: #ff9999;
+}
+
+@media (max-width: 639px) {
+  .App {
+    padding: 20px;
+  }
+
+  .App .Logo {
+    font-size: 26px;
+  }
+
+  .App .SignIn {
+    margin-top: 20px;
+  }
 }
