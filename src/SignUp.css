@@ -1,0 +1,172 @@
+.SignUp {
+  max-width: 671px;
+}
+
+.SignUp h2 {
+  font-size: 42px;
+  font-weight: 600;
+  margin-top: 15px
+}
+
+.SignUp .linkLoginInstead {
+  display: block;
+  font-size: 18px;
+  font-weight: normal;
+  margin-top: 18px;
+  text-align: right;
+  width: 100%;
+}
+
+.SignUp form {
+  margin-top: 27px;
+}
+
+.SignUp .section {
+  padding: 10px 0 50px;
+  text-align: left;
+}
+
+.SignUp .section h3 {
+  color: #18faff;
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.SignUp .section > p {
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 1.67;
+}
+
+.SignUp .field {
+  align-items: center;
+  display: flex;
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.SignUp .field label {
+  flex-basis: 34%;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.SignUp .field input {
+  flex-basis: 66%;
+}
+
+.SignUp .field.CustomSelect > input {
+  width: 0;
+  position: absolute;
+}
+
+.SignUp .field.CustomSelect .Select {
+  color: #000000;
+  flex-basis: 66%;
+}
+
+.SignUp .field.CustomSelect .Select div[class$=-control] {
+  background-color: #d8d8d8;
+  border: 0;
+}
+
+.SignUp .field.CustomSelect .Select div[class$=-Input],
+.SignUp .field.CustomSelect .Select div[class$=-control],
+.SignUp .field.CustomSelect .Select div[class$=-control] > div {
+  margin: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.SignUp .field.CustomSelect .Select span[class$=-indicatorSeparator] {
+  display: none;
+}
+
+.SignUp .field.CustomSelect .Select div[class$=-indicatorContainer] {
+  color: #333;
+}
+
+.SignUp .field .error {
+  background-color: #993333;
+  border-radius: 5px;
+  color: #ffffff;
+  display: block;
+  left: 67%;
+  padding: 0 10px;
+  position: absolute;
+  top: -10px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.SignUp .RadioGroup {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.SignUp .RadioGroup .RadioItem {
+  flex-basis: 50%;
+}
+
+.SignUp .textScroll {
+  background-color: #d8d8d8;
+  border-radius: 4px;
+  color: black;
+  font-size: 16px;
+  height: 140px;
+  overflow-y: scroll;
+  padding: 10px;
+}
+
+.SignUp .textScroll h4 {
+  margin-bottom: 10px;
+}
+
+.SignUp .Checkbox {
+  margin: 24px 0;
+  position: relative;
+}
+
+.SignUp .Checkbox input,
+.SignUp .Checkbox input ~ label:before {
+  display: block;
+  height: 21px;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 21px;
+}
+
+.SignUp .Checkbox input ~ label:before {
+  background-color: #ffffff;
+  border-radius: 2px;
+  color: #472e93;
+  content: '';
+}
+
+.SignUp .Checkbox input:checked ~ label::before {
+  content: '\002714';
+  line-height: 21px;
+  text-align: center;
+}
+
+.SignUp .Checkbox label {
+  cursor: pointer;
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  padding-left: 40px;
+}
+
+.SignUp .linkPrivacy {
+  font-size: 18px;
+  text-decoration: underline;
+}
+
+.SignUp .btnSignup {
+  margin: 0 auto;
+  position: relative;
+  top: -10px;
+  width: 142px;
+}

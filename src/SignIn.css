@@ -1,7 +1,6 @@
 .SignIn {
   margin-top: 70px;
   max-width: 472px;
-  padding: 28px;
   width: 100%;
 }
 
@@ -15,9 +14,7 @@
 }
 
 .SignIn input {
-  font-size: 18px;
   margin-bottom: 19px;
-  padding: 0 17px;
 }
 
 .SignIn .forgotPassword {

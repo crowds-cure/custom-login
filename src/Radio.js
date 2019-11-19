@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from "classnames";
+import './Radio.css';
 
 // Input feedback
 const InputFeedback = ({ error }) =>
@@ -14,7 +15,7 @@ const RadioButton = ({
   ...props
 }) => {
   return (
-    <div>
+    <div className={`RadioItem ${className}`}>
       <input
         name={name}
         id={id}
@@ -37,7 +38,6 @@ const RadioButtonGroup = ({
   error,
   touched,
   id,
-  label,
   className,
   children
 }) => {
@@ -51,12 +51,9 @@ const RadioButtonGroup = ({
   );
 
   return (
-    <div className={classes}>
-      <fieldset>
-        <legend>{label}</legend>
-        {children}
-        {touched && <InputFeedback error={error} />}
-      </fieldset>
+    <div className={`RadioGroup ${classes}`}>
+      {children}
+      {touched && <InputFeedback error={error} />}
     </div>
   );
 };

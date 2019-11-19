@@ -16,6 +16,11 @@ const randomNames = [
   getUsername(),
   getUsername(),
   getUsername(),
+  getUsername(),
+  getUsername(),
+  getUsername(),
+  getUsername(),
+  getUsername(),
 ];
 
 const yearsOfExperienceOptions = [
@@ -32,13 +37,13 @@ const formikEnhancer = withFormik({
     profession: Yup.string()
       .required('Profession is required!'),
     residencyProgram: Yup.string()
-      .required('Hospital or Country is required!'),
-    firstName: Yup.string()
-      .required('First name is required!'),
-    lastName: Yup.string()
-      .required('Last name is required!'),
+      .required('U.S. Hospital or Country is required!'),
+    firstName: Yup.string(),
+    lastName: Yup.string(),
     password: Yup.string()
       .required('Password is required!'),
+    passwordConfirm: Yup.string()
+      .required('Password confirmation is required!'),
     experience: Yup.string()
       .required('Years of experience is required!'),
     username: Yup.string()
@@ -51,6 +56,7 @@ const formikEnhancer = withFormik({
     firstName: '',
     lastName: '',
     password: '',
+    passwordConfirm: '',
     experience: '',
     notificationOfDataRelease: false,
     consent: false,
@@ -125,180 +131,207 @@ const SignUpForm = (props) => {
     dirty,
     errors,
     handleSubmit,
-    handleReset,
     setFieldValue,
     setFieldTouched,
     isSubmitting,
   } = props;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Sign Up</h2>
-      <Field name="firstName">
-        {({ field, form, meta }) => (
-          <div>
-            <label htmlFor="firstName">First Name</label>
-            <input type="text"
-              {...field}
-              required
-              placeholder="First Name"
-              autoComplete="given-name"/>
-            {meta.touched &&
-              meta.error && <div className="error">{meta.error}</div>}
+    <div className="SignUp">
+      <h2>Sign up</h2>
+      <a href="#login" className="link linkLoginInstead">Log in instead →</a>
+      <form onSubmit={handleSubmit}>
+        <div className="section">
+          <h3>1. Real name (optional)</h3>
+          <p>If entered, your name will appear on the public leaderboard.</p>
+          <hr />
+          <Field name="firstName">
+            {({ field, form, meta }) => (
+              <div className="field">
+                <label htmlFor="firstName">First name</label>
+                <input type="text"
+                  {...field}
+                  placeholder="First name (optional)"
+                  autoComplete="given-name"/>
+                {meta.touched &&
+                  meta.error && <div className="error">{meta.error}</div>}
+              </div>
+            )}
+          </Field>
+          <Field name="lastName">
+            {({ field, form, meta }) => (
+              <div className="field">
+                <label htmlFor="lastName">Last name</label>
+                <input type="text"
+                  {...field}
+                  placeholder="Last name (optional)"
+                  autoComplete="family-name"/>
+                {meta.touched &&
+                  meta.error && <div className="error">{meta.error}</div>}
+              </div>
+            )}
+          </Field>
+        </div>
+        <div className="section">
+          <h3>2. User name</h3>
+          <p>Displayed on the public leaderboard, if you did not enter a real name.</p>
+          <hr />
+          <div className="fields">
+            <RadioButtonGroup
+              id="username"
+              value={values.username}
+              error={errors.username}
+              touched={touched.username}
+            >
+              {randomNames.map(name => (
+                <Field
+                  key={name}
+                  id={name}
+                  component={RadioButton}
+                  name="username"
+                  label={name}
+                  required={true}
+                />  
+              ))}
+            </RadioButtonGroup>
           </div>
-        )}
-      </Field>
-      <Field name="lastName">
-        {({ field, form, meta }) => (
-          <div>
-            <label htmlFor="lastName">Last Name</label>
-            <input type="text"
-              {...field}
-              required
-              placeholder="Last Name"
-              autoComplete="family-name"/>
-            {meta.touched &&
-              meta.error && <div className="error">{meta.error}</div>}
+        </div>
+        <div className="section">
+          <h3>3. Login information</h3>
+          <hr />
+          <div className="fields">
+            <Field name="email">
+              {({ field, form, meta }) => (
+                <div className="field">
+                  <label htmlFor="email">Email address</label>
+                  <input type="email"
+                    {...field}
+                    required
+                    placeholder="Email address"
+                    autoComplete="email"/>
+                  {meta.touched &&
+                    meta.error && <div className="error">{meta.error}</div>}
+                </div>
+              )}
+            </Field>
+            <Field name="password">
+              {({ field, form, meta }) => (
+                <div className="field">
+                  <label htmlFor="password">Password</label>
+                  <input type="password"
+                    {...field}
+                    required
+                    placeholder="Password"
+                    autoComplete="new-password"/>
+                  {meta.touched &&
+                    meta.error && <div className="error">{meta.error}</div>}
+                </div>
+              )}
+            </Field>
+            <Field name="passwordConfirm">
+              {({ field, form, meta }) => (
+                <div className="field">
+                  <label htmlFor="passwordConfirm">Confirm password</label>
+                  <input type="password"
+                    {...field}
+                    required
+                    placeholder="Confirm password"/>
+                  {meta.touched &&
+                    meta.error && <div className="error">{meta.error}</div>}
+                </div>
+              )}
+            </Field>
           </div>
-        )}
-      </Field>
-      <Field name="password">
-        {({ field, form, meta }) => (
-          <div>
-            <label htmlFor="password">Password</label>
-            <input type="password"
-              {...field}
-              required
-              placeholder="Password"
-              autoComplete="new-password"/>
-            {meta.touched &&
-              meta.error && <div className="error">{meta.error}</div>}
-          </div>
-        )}
-      </Field>
-      <Field name="email">
-        {({ field, form, meta }) => (
-          <div>
-            <label htmlFor="email">Email</label>
-            <input type="email"
-              {...field}
-              required
-              placeholder="Email"
-              autoComplete="email"/>
-            {meta.touched &&
-              meta.error && <div className="error">{meta.error}</div>}
-          </div>
-        )}
-      </Field>
-      <CustomSelect
-        value={values.profession}
-        fieldName={'profession'}
-        label={'Profession'}
-        options={profession}
-        onChange={setFieldValue}
-        onBlur={setFieldTouched}
-        error={errors.profession}
-        touched={touched.profession}
-        required={true}
-      />
-      <RadioButtonGroup
-        id="experience"
-        label="Years of Experience"
-        value={values.experience}
-        error={errors.experience}
-        touched={touched.experience}
-      >
-        {yearsOfExperienceOptions.map(option => (
-          <Field
-            key={option.value}
-            id={option.value}
-            component={RadioButton}
-            name="experience"
-            label={option.label}
-          />  
-        ))}
-      </RadioButtonGroup>
-      <CustomSelect
-        value={values.residencyProgram}
-        fieldName={'residencyProgram'}
-        label={'Hospital or Country'}
-        options={residencyProgram}
-        required={true}
-        onChange={setFieldValue}
-        onBlur={setFieldTouched}
-        error={errors.residencyProgram}
-        touched={touched.residencyProgram}
-      />
-      <RadioButtonGroup
-        id="username"
-        label="Select a Username"
-        value={values.username}
-        error={errors.username}
-        touched={touched.username}
-      >
-        {randomNames.map(name => (
-          <Field
-            key={name}
-            id={name}
-            component={RadioButton}
-            name="username"
-            label={name}
-            required={true}
-          />  
-        ))}
-      </RadioButtonGroup>
-
-      <Field name="notificationOfDataRelease">
-        {({ field, form, meta }) => (
-          <div>
-            {/* Right now this is the only field that is not required. */}
-            <label htmlFor="notificationOfDataRelease">Notify me when the data has been released.</label>
-            <input
-              id="notificationOfDataRelease"
-              name="notificationOfDataRelease"
-              type="checkbox"
-              { ...field}
-              defaultChecked={values.notificationOfDataRelease}
-              value={values.notificationOfDataRelease}
+        </div>
+        <div className="section">
+          <h3>4. Experience</h3>
+          <hr />
+          <div className="fields">
+            <CustomSelect
+              value={values.profession}
+              fieldName={'profession'}
+              label={'Profession'}
+              options={profession}
+              onChange={setFieldValue}
+              onBlur={setFieldTouched}
+              error={errors.profession}
+              touched={touched.profession}
+              required={true}
             />
-            {meta.touched &&
-              meta.error && <div className="error">{meta.error}</div>}
-          </div>
-        )}
-      </Field>
-
-      <ConsentFactSheet/>
-
-      <Field name="consent">
-        {({ field, form, meta }) => (
-          <div>
-            {/* Right now this is the only field that is not required. */}
-            <label htmlFor="consent">I have read and agree to the consent fact sheet.</label>
-            <input
-              id="consent"
-              type="checkbox"
-              { ...field }
-              required
-              defaultChecked={values.consent}
+            <CustomSelect
+              value={values.experience}
+              fieldName={'experience'}
+              label={'Years of experience'}
+              options={yearsOfExperienceOptions}
+              onChange={setFieldValue}
+              onBlur={setFieldTouched}
+              error={errors.experience}
+              touched={touched.experience}
+              required={true}
             />
-            {meta.touched &&
-              meta.error && <div className="error">{meta.error}</div>}
+            <CustomSelect
+              value={values.residencyProgram}
+              fieldName={'residencyProgram'}
+              label={'U.S. Hospital or Country'}
+              options={residencyProgram}
+              required={true}
+              onChange={setFieldValue}
+              onBlur={setFieldTouched}
+              error={errors.residencyProgram}
+              touched={touched.residencyProgram}
+            />
           </div>
-        )}
-      </Field>
-      <button
-        type="button"
-        className="btn"
-        onClick={handleReset}
-        disabled={!dirty || isSubmitting}
-      >
-        Reset
-      </button>
-      <button
-        type="submit"
-        className="btn"
-        disabled={isSubmitting}>Submit</button>
-    </form>
+        </div>
+        <div className="section">
+          <h3>5. Consent and notifications</h3>
+          <hr />
+          <div className="textScroll">
+            <ConsentFactSheet/>
+          </div>
+          <Field name="consent">
+            {({ field, form, meta }) => (
+              <div className="Checkbox">
+                <input
+                  id="consent"
+                  type="checkbox"
+                  { ...field }
+                  required
+                  defaultChecked={values.consent}
+                />
+                <label htmlFor="consent">
+                  <span>I have read and agree to the consent fact sheet (above) and the </span>
+                  <a className="link linkPrivacy" href="#privacy">Privacy policy</a>
+                </label>
+                {meta.touched &&
+                  meta.error && <div className="error">{meta.error}</div>}
+              </div>
+            )}
+          </Field>
+          <Field name="notificationOfDataRelease">
+            {({ field, form, meta }) => (
+              <div className="Checkbox">
+                {/* Right now this is the only field that is not required. */}
+                <input
+                  id="notificationOfDataRelease"
+                  name="notificationOfDataRelease"
+                  type="checkbox"
+                  { ...field}
+                  defaultChecked={values.notificationOfDataRelease}
+                  value={values.notificationOfDataRelease}
+                />
+                <label htmlFor="notificationOfDataRelease">Notify me when data is released</label>
+                {meta.touched &&
+                  meta.error && <div className="error">{meta.error}</div>}
+              </div>
+            )}
+          </Field>
+        </div>
+        <button
+          type="submit"
+          className="btn btnSignup"
+          disabled={isSubmitting}>Sign up</button>
+      </form>
+    </div>
   );
 };
 

@@ -18,7 +18,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
+  min-height: 100%;
+  padding: 34px;
   text-align: center;
   width: 100%;
 }
@@ -28,6 +29,7 @@ body {
   border-radius: 6px;
   box-shadow: 13px 13px 0 0 #030628;
   display: block;
+  padding: 28px;
 }
 
 .App form input[type=text],
@@ -37,8 +39,16 @@ body {
   border: 0;
   border-radius: 5px;
   display: block;
+  font-size: 18px;
   height: 45px;
   outline: 0;
+  padding: 0 17px;
+  width: 100%;
+}
+
+.App form hr {
+  border: solid 1px #896be3;
+  margin: 20px 0;
   width: 100%;
 }
 
@@ -88,5 +98,35 @@ form .error {
 
   .App .SignIn {
     margin-top: 20px;
+  }
+
+  .App .SignUp .RadioGroup .RadioItem {
+    flex-basis: 100%;
+  }
+
+  .App .SignUp .field {
+    flex-wrap: wrap;
+  }
+
+  .App .SignUp .field input,
+  .App .SignUp .field label {
+    flex-basis: 100%;
+  }
+
+  .App .SignUp .field.CustomSelect .Select {
+    flex-basis: 100%;
+  }
+
+  .App .SignUp .field .error {
+    left: 50%;
+    top: 58px;
+  }
+
+  .App .SignUp .textScroll {
+    height: 300px;
+  }
+
+  .App .SignUp .section {
+    padding-bottom: 20px;
   }
 }

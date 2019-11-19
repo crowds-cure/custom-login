@@ -14,32 +14,30 @@ class CustomSelect extends Component {
 
   render() {
     return (
-      <div style={{ margin: '1rem 0', color: 'black'}}>
+      <div className="field CustomSelect">
         <label htmlFor={this.props.fieldName}>{this.props.label}</label>
-        <>
-          <Select
-            id={this.props.fieldName}
-            options={this.props.options}
-            multi={this.props.multi}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
+        <Select
+          className="Select"
+          id={this.props.fieldName}
+          options={this.props.options}
+          multi={this.props.multi}
+          onChange={this.handleChange}
+          onBlur={this.handleBlur}
+          value={this.props.value}
+        />
+        {!this.props.disabled && (
+          <input
+            tabIndex={-1}
+            autoComplete="off"
+            style={{ opacity: 0, height: 0 }}
             value={this.props.value}
+            onChange={() => {}}
+            required={this.props.required}
           />
-          {!this.props.disabled && (
-            <input
-              tabIndex={-1}
-              autoComplete="off"
-              style={{ opacity: 0, height: 0 }}
-              value={this.props.value}
-              onChange={() => {}}
-              required={this.props.required}
-            />
-            )}
-        </>
-        {!!this.props.error &&
-          this.props.touched && (
-            <div style={{ color: 'red', marginTop: '.5rem' }}>{this.props.error}</div>
-          )}
+        )}
+        {!!this.props.error && this.props.touched && (
+          <div className="error">{this.props.error}</div>
+        )}
       </div>
     );
   }
