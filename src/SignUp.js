@@ -99,13 +99,13 @@ const formikEnhancer = withFormik({
       email, 
       password,
       username,
-      given_name: firstName,
-      family_name: lastName,
+      given_name: firstName || username.split('.')[0],
+      family_name: lastName || username.split('.')[1],
       name: `${firstName} ${lastName}`,
       nickname: username,
       user_metadata: {
         occupation: profession.value,
-        experience,
+        experience: experience.value,
         team: residencyProgram.value,
         // Note: for some reason, Auth0 wants these as Strings
         notificationOfDataRelease: notificationOfDataRelease.toString(),
