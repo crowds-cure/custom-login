@@ -85,6 +85,14 @@ body {
   background-color: #ffffff;
 }
 
+.App .btn[disabled],
+.App .btn.disabled {
+  background-color: #24154F;
+  color: #8B8888;
+  cursor: not-allowed;
+  outline: none;
+}
+
 form .error {
   color: #ff9999;
 }

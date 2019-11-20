@@ -6,8 +6,10 @@ import './SignIn.css';
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
+    email: Yup.string()
+      .required('Username or Email is required'),
     password: Yup.string()
-      .required('Password is required!'),
+      .required('Password is required'),
   }),
   mapPropsToValues: props => ({
     password: '',
@@ -60,62 +62,98 @@ const formikEnhancer = withFormik({
     });
     setSubmitting(false);
   },
-  displayName: 'SignUpForm',
+  displayName: 'SignInForm',
+  validateOnMount: true,
 });
 
-const SignInForm = (props) => {
-  const {
-    handleSubmit,
-    isSubmitting,
-    togglePage,
-  } = props;
+class SignInForm extends React.Component {
+  constructor() {
+    super();
 
-  const redirectToSignUp = () => togglePage('signup');
+    this.redirectToSignUp = this.redirectToSignUp.bind(this);
+  }
 
-  return (
-    <form className="SignIn" onSubmit={handleSubmit}>
-      <h2>Log in</h2>
+  renderEmailField() {
+    return (
       <Field name="email">
         {({ field, form, meta }) => (
-          <>
             <input type="text"
               {...field}
               required
               placeholder="Username or Email"
-              autoComplete="email"/>
-            {meta.touched &&
-              meta.error && <div className="error">{meta.error}</div>}
-          </>
+              autoComplete="email"
+            />
         )}
       </Field>
+    );
+  }
+
+  renderPasswordField() {
+    return (
       <Field name="password">
         {({ field, form, meta }) => (
-          <>
-            <input type="password"
-              {...field}
-              required
-              placeholder="Password"
-              autoComplete="new-password"/>
-            {meta.touched &&
-              meta.error && <div className="error">{meta.error}</div>}
-          </>
+          <input type="password"
+            {...field}
+            required
+            placeholder="Password"
+            autoComplete="new-password"
+          />
         )}
       </Field>
-      <button className="forgotPassword link">Forgot your password?</button>
-      <div className="actions">
-        <button
-          className="linkSignup link"
-          onClick={redirectToSignUp}
-        >Create account</button>
-        <button
-          type="submit"
-          className="btnLogin btn"
-          disabled={isSubmitting}
-        >Log in</button>
-      </div>
-    </form>
-  );
-};
+    );
+  }
+
+  renderErrorMessages() {
+    const { errors } = this.props;
+    const errorMessages = [];
+
+    Object.keys(errors).forEach(key => {
+      const meta = this.props.getFieldMeta(key);
+      if (meta && meta.touched) {
+        errorMessages.push(meta.error);
+      }
+    });
+
+    if (errorMessages.length) {
+      return <div className="error">{errorMessages.join('; ')}</div>;
+    }
+  }
+
+  getLoginButtonDisabledClass() {
+    const { isSubmitting, errors } = this.props;
+    const hasErrors = Object.keys(errors).length > 0;
+    return isSubmitting || hasErrors ? 'disabled' : '' ;
+  }
+
+  redirectToSignUp() {
+    this.props.togglePage('signup');
+  }
+
+  render() {
+    const { handleSubmit, isSubmitting } = this.props;
+
+    return (
+      <form className="SignIn" onSubmit={handleSubmit}>
+        <h2>Log in</h2>
+        {this.renderEmailField()}
+        {this.renderPasswordField()}
+        {this.renderErrorMessages()}
+        <button className="forgotPassword link">Forgot your password?</button>
+        <div className="actions">
+          <button
+            className="linkSignup link"
+            onClick={this.redirectToSignUp}
+          >Create account</button>
+          <button
+            type="submit"
+            className={`btnLogin btn ${this.getLoginButtonDisabledClass()}`}
+            disabled={isSubmitting}
+          >Log in</button>
+        </div>
+      </form>
+    );
+  }
+}
 
 const EnhancedSignInForm = formikEnhancer(SignInForm);
 

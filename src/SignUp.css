@@ -86,7 +86,8 @@
   color: #333;
 }
 
-.SignUp .field .error {
+.SignUp .field .error,
+.SignUp .Checkbox .error {
   background-color: #993333;
   border-radius: 5px;
   color: #ffffff;
@@ -97,6 +98,11 @@
   top: -10px;
   transform: translateX(-50%);
   white-space: nowrap;
+}
+
+.SignUp .Checkbox .error {
+  left: 50%;
+  top: -18px;
 }
 
 .SignUp .RadioGroup {

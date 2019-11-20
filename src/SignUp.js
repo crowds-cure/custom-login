@@ -49,6 +49,8 @@ const formikEnhancer = withFormik({
       .required('Years of experience is required!'),
     username: Yup.string()
       .required('Username is required!'),
+    consent: Yup.bool()
+      .oneOf([true], 'You must agree to sign up')
   }),
   mapPropsToValues: props => ({
     email: '',
@@ -123,223 +125,282 @@ const formikEnhancer = withFormik({
     setSubmitting(false);
   },
   displayName: 'SignUpForm',
+  validateOnMount: true,
 });
 
-const SignUpForm = (props) => {
-  const {
-    values,
-    touched,
-    errors,
-    handleSubmit,
-    setFieldValue,
-    setFieldTouched,
-    isSubmitting,
-    togglePage,
-  } = props;
+class SignUpForm extends React.Component {
+  constructor() {
+    super();
 
-  const redirectToLogin = () => togglePage('login');
+    this.redirectToLogin = this.redirectToLogin.bind(this);
+  }
 
-  return (
-    <div className="SignUp">
-      <h2>Sign up</h2>
-      <button
-        className="link linkLoginInstead"
-        onClick={redirectToLogin}
-      >Log in instead →</button>
-      <form onSubmit={handleSubmit}>
-        <div className="section">
-          <h3>1. Real name (optional)</h3>
-          <p>If entered, your name will appear on the public leaderboard.</p>
-          <hr />
-          <Field name="firstName">
-            {({ field, form, meta }) => (
-              <div className="field">
-                <label htmlFor="firstName">First name</label>
-                <input type="text"
-                  {...field}
-                  placeholder="First name (optional)"
-                  autoComplete="given-name"/>
-                {meta.touched &&
-                  meta.error && <div className="error">{meta.error}</div>}
-              </div>
-            )}
-          </Field>
-          <Field name="lastName">
-            {({ field, form, meta }) => (
-              <div className="field">
-                <label htmlFor="lastName">Last name</label>
-                <input type="text"
-                  {...field}
-                  placeholder="Last name (optional)"
-                  autoComplete="family-name"/>
-                {meta.touched &&
-                  meta.error && <div className="error">{meta.error}</div>}
-              </div>
-            )}
-          </Field>
-        </div>
-        <div className="section">
-          <h3>2. User name</h3>
-          <p>Displayed on the public leaderboard, if you did not enter a real name.</p>
-          <hr />
-          <div className="fields">
-            <RadioButtonGroup
-              id="username"
-              value={values.username}
-              error={errors.username}
-              touched={touched.username}
-            >
-              {randomNames.map(name => (
-                <Field
-                  key={name}
-                  id={name}
-                  component={RadioButton}
-                  name="username"
-                  label={name}
-                  required={true}
-                />  
-              ))}
-            </RadioButtonGroup>
-          </div>
-        </div>
-        <div className="section">
-          <h3>3. Login information</h3>
-          <hr />
-          <div className="fields">
-            <Field name="email">
-              {({ field, form, meta }) => (
-                <div className="field">
-                  <label htmlFor="email">Email address</label>
-                  <input type="email"
-                    {...field}
-                    required
-                    placeholder="Email address"
-                    autoComplete="email"/>
-                  {meta.touched &&
-                    meta.error && <div className="error">{meta.error}</div>}
-                </div>
-              )}
-            </Field>
-            <Field name="password">
-              {({ field, form, meta }) => (
-                <div className="field">
-                  <label htmlFor="password">Password</label>
-                  <input type="password"
-                    {...field}
-                    required
-                    placeholder="Password"
-                    autoComplete="new-password"/>
-                  {meta.touched &&
-                    meta.error && <div className="error">{meta.error}</div>}
-                </div>
-              )}
-            </Field>
-            <Field name="passwordConfirm">
-              {({ field, form, meta }) => (
-                <div className="field">
-                  <label htmlFor="passwordConfirm">Confirm password</label>
-                  <input type="password"
-                    {...field}
-                    required
-                    placeholder="Confirm password"/>
-                  {meta.touched &&
-                    meta.error && <div className="error">{meta.error}</div>}
-                </div>
-              )}
-            </Field>
-          </div>
-        </div>
-        <div className="section">
-          <h3>4. Experience</h3>
-          <hr />
-          <div className="fields">
-            <CustomSelect
-              value={values.profession}
-              fieldName={'profession'}
-              label={'Profession'}
-              options={profession}
-              onChange={setFieldValue}
-              onBlur={setFieldTouched}
-              error={errors.profession}
-              touched={touched.profession}
-              required={true}
-            />
-            <CustomSelect
-              value={values.experience}
-              fieldName={'experience'}
-              label={'Years of experience'}
-              options={yearsOfExperienceOptions}
-              onChange={setFieldValue}
-              onBlur={setFieldTouched}
-              error={errors.experience}
-              touched={touched.experience}
-              required={true}
-            />
-            <CustomSelect
-              value={values.residencyProgram}
-              fieldName={'residencyProgram'}
-              label={'U.S. Hospital or Country'}
-              options={residencyProgram}
-              required={true}
-              onChange={setFieldValue}
-              onBlur={setFieldTouched}
-              error={errors.residencyProgram}
-              touched={touched.residencyProgram}
-            />
-          </div>
-        </div>
-        <div className="section">
-          <h3>5. Consent and notifications</h3>
-          <hr />
-          <div className="textScroll">
-            <ConsentFactSheet/>
-          </div>
-          <Field name="consent">
-            {({ field, form, meta }) => (
-              <div className="Checkbox">
-                <input
-                  id="consent"
-                  type="checkbox"
-                  { ...field }
-                  required
-                  defaultChecked={values.consent}
-                />
-                <label htmlFor="consent">
-                  <span>I have read and agree to the consent fact sheet (above) and the </span>
-                  <a className="link linkPrivacy" href="#privacy">Privacy policy</a>
-                </label>
-                {meta.touched &&
-                  meta.error && <div className="error">{meta.error}</div>}
-              </div>
-            )}
-          </Field>
-          <Field name="notificationOfDataRelease">
-            {({ field, form, meta }) => (
-              <div className="Checkbox">
-                {/* Right now this is the only field that is not required. */}
-                <input
-                  id="notificationOfDataRelease"
-                  name="notificationOfDataRelease"
-                  type="checkbox"
-                  { ...field}
-                  defaultChecked={values.notificationOfDataRelease}
-                  value={values.notificationOfDataRelease}
-                />
-                <label htmlFor="notificationOfDataRelease">Notify me when data is released</label>
-                {meta.touched &&
-                  meta.error && <div className="error">{meta.error}</div>}
-              </div>
-            )}
-          </Field>
-        </div>
+  redirectToLogin() {
+    this.props.togglePage('login');
+  }
+
+  renderHeader() {
+    return (
+      <>
+        <h2>Sign up</h2>
         <button
-          type="submit"
-          className="btn btnSignup"
-          disabled={isSubmitting}>Sign up</button>
-      </form>
-    </div>
-  );
-};
+          className="link linkLoginInstead"
+          onClick={this.redirectToLogin}
+        >Log in instead →</button>
+      </>
+    );
+  }
+
+  renderRealNameSection() {
+    return (
+      <div className="section">
+        <h3>1. Real name (optional)</h3>
+        <p>If entered, your name will appear on the public leaderboard.</p>
+        <hr />
+        <Field name="firstName">
+          {({ field, form, meta }) => (
+            <div className="field">
+              <label htmlFor="firstName">First name</label>
+              <input type="text"
+                {...field}
+                placeholder="First name (optional)"
+                autoComplete="given-name"/>
+              {meta.touched &&
+                meta.error && <div className="error">{meta.error}</div>}
+            </div>
+          )}
+        </Field>
+        <Field name="lastName">
+          {({ field, form, meta }) => (
+            <div className="field">
+              <label htmlFor="lastName">Last name</label>
+              <input type="text"
+                {...field}
+                placeholder="Last name (optional)"
+                autoComplete="family-name"/>
+              {meta.touched &&
+                meta.error && <div className="error">{meta.error}</div>}
+            </div>
+          )}
+        </Field>
+      </div>
+    );
+  }
+
+  renderUserNameSection() {
+    const { values, errors, touched } = this.props;
+
+    return (
+      <div className="section">
+        <h3>2. User name</h3>
+        <p>Displayed on the public leaderboard, if you did not enter a real name.</p>
+        <hr />
+        <div className="fields">
+          <RadioButtonGroup
+            id="username"
+            value={values.username}
+            error={errors.username}
+            touched={touched.username}
+          >
+            {randomNames.map(name => (
+              <Field
+                key={name}
+                id={name}
+                component={RadioButton}
+                name="username"
+                label={name}
+                required={true}
+              />
+            ))}
+          </RadioButtonGroup>
+        </div>
+      </div>
+    );
+  }
+
+  renderLoginInformationSection() {
+    return (
+      <div className="section">
+        <h3>3. Login information</h3>
+        <hr />
+        <div className="fields">
+          <Field name="email">
+            {({ field, form, meta }) => (
+              <div className="field">
+                <label htmlFor="email">Email address</label>
+                <input type="email"
+                  {...field}
+                  required
+                  placeholder="Email address"
+                  autoComplete="email"/>
+                {meta.touched &&
+                  meta.error && <div className="error">{meta.error}</div>}
+              </div>
+            )}
+          </Field>
+          <Field name="password">
+            {({ field, form, meta }) => (
+              <div className="field">
+                <label htmlFor="password">Password</label>
+                <input type="password"
+                  {...field}
+                  required
+                  placeholder="Password"
+                  autoComplete="new-password"/>
+                {meta.touched &&
+                  meta.error && <div className="error">{meta.error}</div>}
+              </div>
+            )}
+          </Field>
+          <Field name="passwordConfirm">
+            {({ field, form, meta }) => (
+              <div className="field">
+                <label htmlFor="passwordConfirm">Confirm password</label>
+                <input type="password"
+                  {...field}
+                  required
+                  placeholder="Confirm password"/>
+                {meta.touched &&
+                  meta.error && <div className="error">{meta.error}</div>}
+              </div>
+            )}
+          </Field>
+        </div>
+      </div>
+    );
+  }
+
+  renderExperienceSection() {
+    const {
+      values,
+      setFieldValue,
+      setFieldTouched,
+      errors,
+      touched
+    } = this.props;
+
+    return (
+      <div className="section">
+        <h3>4. Experience</h3>
+        <hr />
+        <div className="fields">
+          <CustomSelect
+            value={values.profession}
+            fieldName={'profession'}
+            label={'Profession'}
+            options={profession}
+            onChange={setFieldValue}
+            onBlur={setFieldTouched}
+            error={errors.profession}
+            touched={touched.profession}
+            required={true}
+          />
+          <CustomSelect
+            value={values.experience}
+            fieldName={'experience'}
+            label={'Years of experience'}
+            options={yearsOfExperienceOptions}
+            onChange={setFieldValue}
+            onBlur={setFieldTouched}
+            error={errors.experience}
+            touched={touched.experience}
+            required={true}
+          />
+          <CustomSelect
+            value={values.residencyProgram}
+            fieldName={'residencyProgram'}
+            label={'U.S. Hospital or Country'}
+            options={residencyProgram}
+            required={true}
+            onChange={setFieldValue}
+            onBlur={setFieldTouched}
+            error={errors.residencyProgram}
+            touched={touched.residencyProgram}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  renderConsentSection() {
+    const { values } = this.props;
+
+    return (
+      <div className="section">
+        <h3>5. Consent and notifications</h3>
+        <hr />
+        <div className="textScroll">
+          <ConsentFactSheet/>
+        </div>
+        <Field name="consent">
+          {({ field, form, meta }) => (
+            <div className="Checkbox">
+              <input
+                id="consent"
+                type="checkbox"
+                { ...field }
+                required
+                defaultChecked={values.consent}
+              />
+              <label htmlFor="consent">
+                <span>I have read and agree to the consent fact sheet (above) and the </span>
+                <a className="link linkPrivacy" href="#privacy">Privacy policy</a>
+              </label>
+              {meta.touched &&
+                meta.error && <div className="error">{meta.error}</div>}
+            </div>
+          )}
+        </Field>
+        <Field name="notificationOfDataRelease">
+          {({ field, form, meta }) => (
+            <div className="Checkbox">
+              {/* Right now this is the only field that is not required. */}
+              <input
+                id="notificationOfDataRelease"
+                name="notificationOfDataRelease"
+                type="checkbox"
+                { ...field}
+                defaultChecked={values.notificationOfDataRelease}
+                value={values.notificationOfDataRelease}
+              />
+              <label htmlFor="notificationOfDataRelease">Notify me when data is released</label>
+              {meta.touched &&
+                meta.error && <div className="error">{meta.error}</div>}
+            </div>
+          )}
+        </Field>
+      </div>
+    );
+  }
+
+  getSignupButtonDisabledClass() {
+    const { isSubmitting, errors } = this.props;
+    const hasErrors = Object.keys(errors).length > 0;
+    return isSubmitting || hasErrors ? 'disabled' : '' ;
+  }
+
+  render() {
+    const { handleSubmit, isSubmitting } = this.props;
+
+    return (
+      <div className="SignUp">
+        {this.renderHeader()}
+        <form onSubmit={handleSubmit}>
+          {this.renderRealNameSection()}
+          {this.renderUserNameSection()}
+          {this.renderLoginInformationSection()}
+          {this.renderExperienceSection()}
+          {this.renderConsentSection()}
+          <button
+            type="submit"
+            className={`btnSignup btn ${this.getSignupButtonDisabledClass()}`}
+            disabled={isSubmitting}
+          >Sign up</button>
+        </form>
+      </div>
+    );
+  }
+}
 
 const EnhancedSignUpForm = formikEnhancer(SignUpForm);
 
