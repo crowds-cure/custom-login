@@ -1,6 +1,6 @@
 import React from 'react';
 import { withFormik, Field } from 'formik';
-import auth0 from 'auth0-js';
+import { Auth } from 'aws-amplify';
 import * as Yup from 'yup';
 import './SignUp.css';
 import ConsentFactSheet from './ConsentFactSheet.js';
@@ -78,45 +78,30 @@ const formikEnhancer = withFormik({
       username,
       consent } = values;
 
-    const { config } = props;
-
-    const params = Object.assign({
-      /* additional configuration needed for use of custom domains */
-      overrides: {
-        __tenant: config.auth0Tenant,
-        __token_issuer: config.authorizationServer.issuer,
-        __jwks_uri: `${config.authorizationServer.issuer}.well-known/jwks.json`
-      },
-      //
-      domain: config.auth0Domain,
-      clientID: config.clientID,
-      redirectUri: config.callbackURL,
-      responseType: 'code'
-    }, config.internalOptions);
-
-    // Initialize client
-    const webAuth = new auth0.WebAuth(params);
-    
     const options = { 
-      connection: "Username-Password-Authentication",
-      email, 
       password,
       username,
-      given_name: firstName || username.split('.')[0],
-      family_name: lastName || username.split('.')[1],
-      name: `${firstName} ${lastName}`,
-      nickname: username,
-      user_metadata: {
-        occupation: profession.value,
-        experience: experience.value,
-        team: residencyProgram.value,
-        // Note: for some reason, Auth0 wants these as Strings
-        notificationOfDataRelease: notificationOfDataRelease.toString(),
-        consent: consent.toString()
+      attributes: {
+        email,
+        given_name: firstName || username.split('.')[0],
+        family_name: lastName || username.split('.')[1],
+        name: `${firstName} ${lastName}`,
+        nickname: username,
+        'custom:occupation': profession.value,
+        'custom:experience': experience.value,
+        'custom:team': residencyProgram.value,
+        'custom:data': notificationOfDataRelease.toString(),
+        'custom:consent': consent.toString()
       }
     };
 
-    webAuth.redirect.signupAndLogin(options, function (err) { 
+    Auth.signUp(options).then(user => {
+      console.log(user)
+
+      console.warn('Done! Redirect?');
+
+      window.location = 'https://cancer.crowds-cure.org/'
+    }).catch(err => {
       if (err) {
         alert(`Something went wrong: ${err.message}`);
         throw new Error(err.message); 

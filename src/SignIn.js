@@ -1,8 +1,8 @@
 import React from 'react';
 import { withFormik, Field } from 'formik';
-import auth0 from 'auth0-js';
 import * as Yup from 'yup';
 import './SignIn.css';
+import { Auth } from 'aws-amplify';
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
@@ -17,29 +17,7 @@ const formikEnhancer = withFormik({
   handleSubmit: (values, { props, setSubmitting }) => {
     const { email, password } = values;
 
-    const { config } = props;
-
-    const params = Object.assign({
-        /* additional configuration needed for use of custom domains */
-        overrides: {
-          __tenant: config.auth0Tenant,
-          __token_issuer: config.authorizationServer.issuer,
-          __jwks_uri: `${config.authorizationServer.issuer}.well-known/jwks.json`
-        },
-        //
-        domain: config.auth0Domain,
-        clientID: config.clientID,
-        redirectUri: config.callbackURL,
-        responseType: 'code'
-      }, config.internalOptions);
-
-        // Initialize client
-    const webAuth = new auth0.WebAuth(params);
-
-    window.webAuth = webAuth;
-
     const options = { 
-      realm: "Username-Password-Authentication",
       password,
     };
 
@@ -50,15 +28,20 @@ const formikEnhancer = withFormik({
         options.username = email;
     }
     
-    webAuth.login(options, function (err) { 
-      if (err) {
-        alert(`Something went wrong: ${err.message}`);
-        throw new Error(err.message); 
-      }
+    // For advanced usage
+    // You can pass an object which has the username, password and validationData which is sent to a PreAuthentication Lambda trigger
+    Auth.signIn(options).then(user => {
+      console.log(user)
 
       console.warn('Done! Redirect?');
 
       window.location = 'https://cancer.crowds-cure.org/'
+    })
+    .catch(err => {
+      if (err) {
+        alert(`Something went wrong: ${err.message}`);
+        throw new Error(err.message); 
+      }
     });
     setSubmitting(false);
   },
