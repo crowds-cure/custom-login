@@ -551,7 +551,7 @@ module.exports = function(webpackEnv) {
       // https://github.com/facebook/create-react-app/issues/5358
       isEnvProduction &&
         shouldInlineRuntimeChunk &&
-        new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin),
+        //new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin),
         new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
