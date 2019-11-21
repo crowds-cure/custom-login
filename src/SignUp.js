@@ -344,7 +344,7 @@ class SignUpForm extends React.Component {
               />
               <label htmlFor="consent">
                 <span>I have read and agree to the consent fact sheet (above) and the </span>
-                <a className="link linkPrivacy" href="#privacy">Privacy policy</a>
+                <a className="link linkPrivacy" target="privacy" href="https://www.crowds-cure.org/privacy">Privacy policy</a>
               </label>
               {meta.touched &&
                 meta.error && <div className="error">{meta.error}</div>}
