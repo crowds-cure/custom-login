@@ -6,14 +6,16 @@
 
 .SignIn h2 {
   color: #18faff;
-  font-size: 25px;
-  font-weight: 500;
+  font-size: 28px;
+  font-weight: 600;
   height: 60px;
   line-height: 1.2;
   margin-bottom: 7px;
 }
 
 .SignIn input {
+  font-size: 18px !important;
+  height: 45px !important;
   margin-bottom: 19px;
 }
 

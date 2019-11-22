@@ -156,7 +156,6 @@ class SignUpForm extends React.Component {
       <div className="section">
         <h3>1. Real name (optional)</h3>
         <p>If entered, your name will appear on the public leaderboard.</p>
-        <hr />
         <Field name="firstName">
           {({ field, form, meta }) => (
             <div className="field">
@@ -183,6 +182,7 @@ class SignUpForm extends React.Component {
             </div>
           )}
         </Field>
+        <hr />
       </div>
     );
   }
@@ -194,7 +194,6 @@ class SignUpForm extends React.Component {
       <div className="section">
         <h3>2. User name</h3>
         <p>Displayed on the public leaderboard, if you did not enter a real name.</p>
-        <hr />
         <div className="fields">
           <RadioButtonGroup
             id="username"
@@ -214,6 +213,7 @@ class SignUpForm extends React.Component {
             ))}
           </RadioButtonGroup>
         </div>
+        <hr />
       </div>
     );
   }
@@ -222,7 +222,6 @@ class SignUpForm extends React.Component {
     return (
       <div className="section">
         <h3>3. Login information</h3>
-        <hr />
         <div className="fields">
           <Field name="email">
             {({ field, form, meta }) => (
@@ -266,6 +265,7 @@ class SignUpForm extends React.Component {
             )}
           </Field>
         </div>
+        <hr />
       </div>
     );
   }
@@ -282,7 +282,6 @@ class SignUpForm extends React.Component {
     return (
       <div className="section">
         <h3>4. Experience</h3>
-        <hr />
         <div className="fields">
           <CustomSelect
             value={values.profession}
@@ -318,6 +317,7 @@ class SignUpForm extends React.Component {
             touched={touched.residencyProgram}
           />
         </div>
+        <hr />
       </div>
     );
   }
@@ -328,7 +328,6 @@ class SignUpForm extends React.Component {
     return (
       <div className="section">
         <h3>5. Consent and notifications</h3>
-        <hr />
         <div className="textScroll">
           <ConsentFactSheet/>
         </div>
@@ -343,7 +342,7 @@ class SignUpForm extends React.Component {
                 defaultChecked={values.consent}
               />
               <label htmlFor="consent">
-                <span>I have read and agree to the consent fact sheet (above) and the </span>
+                <span>I have read and agree to the consent fact sheet and the </span>
                 <a className="link linkPrivacy" target="privacy" href="https://www.crowds-cure.org/privacy">Privacy policy</a>
               </label>
               {meta.touched &&

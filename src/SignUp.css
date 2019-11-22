@@ -3,9 +3,8 @@
 }
 
 .SignUp h2 {
-  font-size: 42px;
-  font-weight: 600;
-  margin-top: 15px
+  font-size: 33px;
+  font-weight: 400;
 }
 
 .SignUp .linkLoginInstead {
@@ -22,18 +21,18 @@
 }
 
 .SignUp .section {
-  padding: 10px 0 50px;
+  padding: 0;
   text-align: left;
 }
 
 .SignUp .section h3 {
   color: #18faff;
-  font-size: 25px;
-  font-weight: 500;
+  font-size: 21px;
+  font-weight: 700;
 }
 
 .SignUp .section > p {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: normal;
   line-height: 1.67;
 }
@@ -41,18 +40,18 @@
 .SignUp .field {
   align-items: center;
   display: flex;
-  margin-bottom: 18px;
+  margin: 12px 0;
   position: relative;
 }
 
 .SignUp .field label {
-  flex-basis: 34%;
-  font-size: 18px;
+  flex-basis: 36%;
+  font-size: 17px;
   font-weight: 600;
 }
 
 .SignUp .field input {
-  flex-basis: 66%;
+  flex-basis: 64%;
 }
 
 .SignUp .field.CustomSelect > input {
@@ -119,7 +118,8 @@
   border-radius: 4px;
   color: black;
   font-size: 16px;
-  height: 140px;
+  height: 106px;
+  margin-top: 10px;
   overflow-y: scroll;
   padding: 10px;
 }
@@ -160,19 +160,27 @@
 .SignUp .Checkbox label {
   cursor: pointer;
   display: block;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  padding-left: 40px;
+  padding-left: 34px;
 }
 
 .SignUp .linkPrivacy {
-  font-size: 18px;
+  font-size: inherit;
   text-decoration: underline;
 }
 
 .SignUp .btnSignup {
-  margin: 0 auto;
+  margin: 40px auto 0;
   position: relative;
   top: -10px;
   width: 142px;
+}
+
+.SignUp .fields {
+  padding-top: 10px;
+}
+
+.App .SignUp form {
+  padding: 20px 28px;
 }

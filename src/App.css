@@ -39,16 +39,16 @@ body {
   border: 0;
   border-radius: 5px;
   display: block;
-  font-size: 18px;
-  height: 45px;
+  font-size: 17px;
+  height: 40px;
   outline: 0;
   padding: 0 17px;
   width: 100%;
 }
 
 .App form hr {
-  border: solid 1px #896be3;
-  margin: 20px 0;
+  border: solid 1px #402986;
+  margin: 20px 0 15px;
   width: 100%;
 }
 

@@ -2,7 +2,7 @@
   align-items: center;
   display: flex;
   height: 24px;
-  margin: 10px 0;
+  margin: 5px 0;
   position: relative;
   width: 100%;
 }
@@ -19,11 +19,11 @@
   border-radius: 12px;
   display: block;
   content: '';
-  height: 24px;
+  height: 18px;
   left: 0;
   position: absolute;
   top: 0;
-  width: 24px;
+  width: 18px;
 }
 
 .RadioItem input:checked ~ label:after {
@@ -32,22 +32,23 @@
   display: block;
   content: '';
   height: 12px;
-  left: 12px;
+  left: 9px;
   position: absolute;
-  top: 50%;
+  top: 9px;
   transform: translate(-50%, -50%);
   width: 12px;
 }
 
 .RadioItem input:checked ~ label:before {
-  box-shadow: 0 0 0 3px #00ffff;
+  box-shadow: 0 0 0 2px #00ffff;
 }
 
 .RadioItem label {
   cursor: pointer;
   display: block;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: normal;
-  padding-left: 40px;
+  padding-left: 28px;
+  position: relative;
   width: 100%;
 }
