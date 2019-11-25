@@ -15,13 +15,14 @@ const getErrorMessage = (err = {}) => {
   let messageToUse;
   
   try {
+    // in case its JSON description use messageFromApp
     JSON.parse(description);
     messageToUse = messageFromApp;
   } catch(e) {
     messageToUse = typeof description === "string" ? description : undefined;
   }
   return messageToUse || ERROR_MESSAGES.generic;
-}
+};
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
@@ -41,28 +42,16 @@ const formikEnhancer = withFormik({
     const params = Object.assign({
       /* additional configuration needed for use of custom domains */
       overrides: {
-        __tenant: "crowds-cure",
+        __tenant: config.auth0Tenant,
+        __token_issuer: config.authorizationServer.issuer,
+        __jwks_uri: `${config.authorizationServer.issuer}.well-known/jwks.json`
       },
       //
-      domain: "auth.crowds-cure.org",
-      auth0Tenant: "crowds-cure",
-      auth0Domain: "auth.crowds-cure.org",
-      clientID: "z5cXMPTxeFOdB3i4xRA8JyhTonQmqMKM",
-      redirectUri: "https://cancer.crowds-cure.org/auth/realms/dcm4che/broker/crowds-cure-cancer-auth0-oidc/endpoint",
+      domain: config.auth0Domain,
+      clientID: config.clientID,
+      redirectUri: config.callbackURL,
       responseType: 'code'
-    }, {
-      internalOptions: {
-        protocol: "oauth2",
-        scope: "email profile openid",
-        response_type: "code",
-        nonce: "396172ba803841809f2be9184fd68640",
-        hash: "#login",
-        _csrf: "9dI3dsrH-HKWz9Sv4BU9B67Gn6JetDnjeig0",
-        _intstate: "deprecated",
-        state: "g6Fo2SA0OUpOVnJsblo1MHplcFdqRGIxRmtURUNlOC0xYVhQdaN0aWTZIG16dmJiQWxhRDllOUtqelJMTlJCQXNadE9kM2pjcUQ3o2NpZNkgejVjWE1QVHhlRk9kQjNpNHhSQThKeWhUb25RbXFNS00"
-      },
-
-    });
+    }, config.internalOptions);
 
         // Initialize client
     const webAuth = new auth0.WebAuth(params);
@@ -84,7 +73,7 @@ const formikEnhancer = withFormik({
     webAuth.login(options, function (err) { 
       if (err) {
         alert(`Something went wrong: ${getErrorMessage(err)}`);
-        throw new Error(err.message); 
+        throw new Error(err.message || err.description); 
       }
 
       console.warn('Done! Redirect?');
