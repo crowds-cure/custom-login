@@ -5,13 +5,14 @@ import * as Yup from 'yup';
 import './SignIn.css';
 
 const ERROR_MESSAGES = {
-  request_error: "Something went wrong: try again later or contact the administrator",
-  generic: "Something went wrong: try again later or contact the administrator"
+  request_error: "try again later or contact the administrator",
+  generic: "try again later or contact the administrator"
 };
 
 const getErrorMessage = (err = {}) => {
   const { code = "", description } = err;
   const messageFromApp = err ? ERROR_MESSAGES[code] : ERROR_MESSAGES.generic;
+  let messageToUse;
   
   try {
     JSON.parse(description);
