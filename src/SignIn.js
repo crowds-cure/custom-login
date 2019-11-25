@@ -13,12 +13,11 @@ const getErrorMessage = (err = {}) => {
   const { code = "", description } = err;
   const messageFromApp = err ? ERROR_MESSAGES[code] : ERROR_MESSAGES.generic;
   
-  let messageToUse = description;
   try {
-    JSON.parse(description)
-
+    JSON.parse(description);
+    messageToUse = messageFromApp;
   } catch(e) {
-    messageToUse = messageFromApp
+    messageToUse = typeof description === "string" ? description : undefined;
   }
   return messageToUse || ERROR_MESSAGES.generic;
 }
