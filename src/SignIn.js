@@ -4,6 +4,25 @@ import auth0 from 'auth0-js';
 import * as Yup from 'yup';
 import './SignIn.css';
 
+const ERROR_MESSAGES = {
+  request_error: "Something went wrong: try again later or contact the administrator",
+  generic: "Something went wrong: try again later or contact the administrator"
+};
+
+const getErrorMessage = (err = {}) => {
+  const { code = "", description } = err;
+  const messageFromApp = err ? ERROR_MESSAGES[code] : ERROR_MESSAGES.generic;
+  
+  let messageToUse = description;
+  try {
+    JSON.parse(description)
+
+  } catch(e) {
+    messageToUse = messageFromApp
+  }
+  return messageToUse || ERROR_MESSAGES.generic;
+}
+
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     email: Yup.string()
@@ -52,7 +71,7 @@ const formikEnhancer = withFormik({
     
     webAuth.login(options, function (err) { 
       if (err) {
-        alert(`Something went wrong: ${err.message}`);
+        alert(`Something went wrong: ${getErrorMessage(err)}`);
         throw new Error(err.message); 
       }
 
