@@ -44,7 +44,7 @@ class App extends React.Component {
 
   renderCurrentPage() {
     const { currentPage } = this.state;
-    if (currentPage === 'signup') {
+    if (currentPage !== 'sign') {
       return <SignUp config={config} togglePage={this.togglePage} />;
     } else {
       return <SignIn config={config} togglePage={this.togglePage} />;
