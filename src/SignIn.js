@@ -35,7 +35,7 @@ const formikEnhancer = withFormik({
 
       console.warn('Done! Redirect?');
 
-      window.location = 'https://cancer.crowds-cure.org/'
+      window.location.href = 'https://deploy-preview-83--crowds-cure-cancer.netlify.com/'
     })
     .catch(err => {
       if (err) {
