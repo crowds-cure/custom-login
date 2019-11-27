@@ -129,13 +129,7 @@ const formikEnhancer = withFormik({
 });
 
 class SignUpForm extends React.Component {
-  constructor() {
-    super();
-
-    this.redirectToLogin = this.redirectToLogin.bind(this);
-  }
-
-  redirectToLogin() {
+  redirectToLogin = () => {
     this.props.togglePage('login');
   }
 

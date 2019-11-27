@@ -8,6 +8,49 @@ import Logo from './Logo.js';
 let config = {};
 try {
 	config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));	
+  
+  // Example for dev
+  /*config = {
+    "icon": "",
+    "assetsUrl": "",
+    "auth0Domain": "auth.crowds-cure.org",
+    "auth0Tenant": "crowds-cure",
+    "clientConfigurationBaseUrl": "https://cdn.auth0.com/",
+    "callbackOnLocationHash": false,
+    "callbackURL": "https://cancer.crowds-cure.org/auth/realms/dcm4che/broker/crowds-cure-cancer-auth0-oidc/endpoint",
+    "cdn": "https://sdk.auth0.com/",
+    "clientID": "z5cXMPTxeFOdB3i4xRA8JyhTonQmqMKM",
+    "dict": {
+      "signin": {
+        "title": "Crowds Cure Cancer"
+      }
+    },
+    "extraParams": {
+      "protocol": "oauth2",
+      "scope": "email profile openid",
+      "response_type": "code",
+      "nonce": "136ed843899e4baa821dc49ebb715b46",
+      "_csrf": "bnBIr6i3-AEG6HF_oaGo09pAN5bOz5sRWJjc",
+      "_intstate": "deprecated",
+      "state": "g6Fo2SBpT1Z3aWZuZ1FFYlVYMnZKdWpLcHh1cm5mNGo4SGNMX6N0aWTZIEtWMjllZ2I3eHlSM1NjNDhuMzRfanpEMVp0MmxXdzNNo2NpZNkgejVjWE1QVHhlRk9kQjNpNHhSQThKeWhUb25RbXFNS00"
+    },
+    "internalOptions": {
+      "protocol": "oauth2",
+      "scope": "email profile openid",
+      "response_type": "code",
+      "nonce": "136ed843899e4baa821dc49ebb715b46",
+      "_csrf": "bnBIr6i3-AEG6HF_oaGo09pAN5bOz5sRWJjc",
+      "_intstate": "deprecated",
+      "state": "g6Fo2SBpT1Z3aWZuZ1FFYlVYMnZKdWpLcHh1cm5mNGo4SGNMX6N0aWTZIEtWMjllZ2I3eHlSM1NjNDhuMzRfanpEMVp0MmxXdzNNo2NpZNkgejVjWE1QVHhlRk9kQjNpNHhSQThKeWhUb25RbXFNS00"
+    },
+    "widgetUrl": "https://cdn.auth0.com/w2/auth0-widget-5.1.min.js",
+    "isThirdPartyClient": false,
+    "authorizationServer": {
+      "url": "https://auth.crowds-cure.org",
+      "issuer": "https://auth.crowds-cure.org/"
+    },
+    "colors": {}
+  };*/
 } catch (error) {
 	console.error(error);
 }
@@ -26,23 +69,15 @@ if (hash && hash.toLowerCase() === '#signup') {
 }
 
 class App extends React.Component {
-
-  constructor() {
-    super();
-
-    this.state = {
-      currentPage: initialPage
-    };
-
-    this.togglePage = this.togglePage.bind(this);
-    this.renderCurrentPage = this.renderCurrentPage.bind(this);
+  state = {
+    currentPage: initialPage
   }
 
-  togglePage(page) {
+  togglePage = (page) => {
     this.setState({ currentPage: page });
   }
 
-  renderCurrentPage() {
+  renderCurrentPage = () => {
     const { currentPage } = this.state;
     if (currentPage === 'signup') {
       return <SignUp config={config} togglePage={this.togglePage} />;
@@ -59,7 +94,6 @@ class App extends React.Component {
       </div>
     );
   }
-
 }
 
 export default App;

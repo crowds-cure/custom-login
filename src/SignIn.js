@@ -3,26 +3,7 @@ import { withFormik, Field } from 'formik';
 import auth0 from 'auth0-js';
 import * as Yup from 'yup';
 import './SignIn.css';
-
-const ERROR_MESSAGES = {
-  request_error: "try again later or contact the administrator",
-  generic: "try again later or contact the administrator"
-};
-
-const getErrorMessage = (err = {}) => {
-  const { code = "", description } = err;
-  const messageFromApp = err ? ERROR_MESSAGES[code] : ERROR_MESSAGES.generic;
-  let messageToUse;
-  
-  try {
-    // in case its JSON description use messageFromApp
-    JSON.parse(description);
-    messageToUse = messageFromApp;
-  } catch(e) {
-    messageToUse = typeof description === "string" ? description : undefined;
-  }
-  return messageToUse || ERROR_MESSAGES.generic;
-};
+import getErrorMessage from './getErrorMessage.js';
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
@@ -34,7 +15,7 @@ const formikEnhancer = withFormik({
   mapPropsToValues: props => ({
     password: '',
   }),
-  handleSubmit: (values, { props, setSubmitting }) => {
+  handleSubmit: (values, { props, setSubmitting, setFieldError }) => {
     const { email, password } = values;
 
     const { config } = props;
@@ -56,8 +37,6 @@ const formikEnhancer = withFormik({
         // Initialize client
     const webAuth = new auth0.WebAuth(params);
 
-    window.webAuth = webAuth;
-
     const options = { 
       realm: "Username-Password-Authentication",
       password,
@@ -72,13 +51,11 @@ const formikEnhancer = withFormik({
     
     webAuth.login(options, function (err) { 
       if (err) {
-        alert(`Something went wrong: ${getErrorMessage(err)}`);
-        throw new Error(err.message || err.description); 
+        setFieldError('general', getErrorMessage(err));
+        console.error(err.message || err.description); 
+      } else {
+        window.location = 'https://cancer.crowds-cure.org/'
       }
-
-      console.warn('Done! Redirect?');
-
-      window.location = 'https://cancer.crowds-cure.org/'
     });
     setSubmitting(false);
   },
@@ -87,12 +64,6 @@ const formikEnhancer = withFormik({
 });
 
 class SignInForm extends React.Component {
-  constructor() {
-    super();
-
-    this.redirectToSignUp = this.redirectToSignUp.bind(this);
-  }
-
   renderEmailField() {
     return (
       <Field name="email">
@@ -129,7 +100,7 @@ class SignInForm extends React.Component {
 
     Object.keys(errors).forEach(key => {
       const meta = this.props.getFieldMeta(key);
-      if (meta && meta.touched) {
+      if (meta && (meta.touched || key === 'general')) {
         errorMessages.push(meta.error);
       }
     });
@@ -145,7 +116,7 @@ class SignInForm extends React.Component {
     return isSubmitting || hasErrors ? 'disabled' : '' ;
   }
 
-  redirectToSignUp() {
+  redirectToSignUp = () => {
     this.props.togglePage('signup');
   }
 
