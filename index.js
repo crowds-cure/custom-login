@@ -1,36 +1,36 @@
 // see previous example for the things that are not commented
 
 const assert = require('assert');
+const querystring = require('querystring');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const Provider = require('oidc-provider');
-const MongoAdapter = require('./mongodb');
+const MongoAdapter = require('./src/mongodb');
 const PORT = process.env.PORT || 3000;
 const URL = process.env.URL || `http://localhost:${PORT}/`;
 const PREFIX = process.env.PREFIX || '';
-const jwks = require('./jwks.json');
+const jwks = require('./src/jwks.json');
 const all_routes = require('express-list-endpoints');
 
 // simple account model for this application, user list is defined like so
-const Account = require('./account');
+const Account = require('./src/account');
 
+function getInteractionUrl(ctx) {
+  return `${PREFIX}/interaction/${ctx.oidc.uid}`;
+}
 const oidc = new Provider(URL, {
   //adapter: MongoAdapter,
   clients: [
     {
-      client_id: 'foo',
-      redirect_uris: ['https://example.com'],
-      response_types: ['id_token'],
-      grant_types: ['implicit'],
-      token_endpoint_auth_method: 'none',
-    },
-    {
-      client_id: 'crowds-cure-cancer',
-      redirect_uris: ['https://cancer.crowds-cure.org'],
+      client_id: 'ccc-oidc-provider',
+      client_secret: 'ccc-secret',
+      redirect_uris: ['https://cancer.crowds-cure.org',
+      'http://localhost:3000', 'https://cancer.crowds-cure.org/auth/realms/dcm4che/broker/crowds-cure-cancer-custom-oidc/endpoint'],
       response_types: ['code'],
-      grant_types: ['implicit', 'authorization_code'],
-      token_endpoint_auth_method: 'none',
+      application_type: 'web',
+      grant_types: ['authorization_code'],
+      token_endpoint_auth_method: 'client_secret_post',
     }, // http://localhost:3000/auth?client_id=crowds-cure-cancer&response_type=code&grant_types=authorization_code&scope=openid+email+profile&nonce=foobar&prompt=login
   ],
   jwks,
@@ -55,13 +55,17 @@ const oidc = new Provider(URL, {
   // don't run into weird issues with multiple interactions open
   // at a time.
   interactions: {
-    url: (ctx) => {
-      return `${PREFIX}/interaction/${ctx.oidc.uid}`;
-    },
+    url: getInteractionUrl
   },
   features: {
     // disable the packaged interactions
     devInteractions: { enabled: false },
+    registration: { enabled: true },
+    backchannelLogout: {
+      enabled: true,
+      ack: 'draft-04',
+    },
+    userinfo: { enabled: true },
 
     introspection: { enabled: true },
     revocation: { enabled: true },
@@ -91,29 +95,25 @@ interactionsRouter.get('/:uid', setNoCache, async (req, res, next) => {
   console.log('hit /interaction/:uid route...');
   try {
     const details = await oidc.interactionDetails(req);
-    console.log('see what else is available to you for interaction views', details);
     const { uid, prompt, params } = details;
 
     const client = await oidc.Client.find(params.client_id);
 
-    if (prompt.name === 'login') {
-      return res.render('login', {
-        client,
-        uid,
-        details: prompt.details,
-        params,
-        title: 'Sign-in',
-        flash: undefined,
-      });
-    }
+    //if (prompt.name === 'login') {
+      params.interactionUrl = getInteractionUrl({ oidc: { uid }});
+      const encoded = querystring.encode(params);
 
-    return res.render('interaction', {
+      return res.redirect(`/login?${encoded}`);
+    //}
+
+    /*return res.render('interaction', {
       client,
       uid,
+      interactionUrl: getInteractionUrl({ oidc: { uid }}),
       details: prompt.details,
       params,
       title: 'Authorize',
-    });
+    });*/
   } catch (err) {
     return next(err);
   }
@@ -127,24 +127,20 @@ interactionsRouter.post('/:uid/login', setNoCache, parse, async (req, res, next)
     const accountId = await Account.authenticate(req.body.email, req.body.password);
 
     if (!accountId) {
-      res.render('login', {
-        client,
-        uid,
-        details: prompt.details,
-        params: {
-          ...params,
-          login_hint: req.body.email,
-        },
-        title: 'Sign-in',
-        flash: 'Invalid email or password.',
-      });
-      return;
+      // TODO: Maybe this should just return JSON?
+      params.interactionUrl = getInteractionUrl({ oidc: { uid }});
+      params.login_hint = req.body.email || req.body.username;
+      params.error = 'invalid-credentials';
+      const encoded = querystring.encode(params);
+
+      return res.redirect(`/login?${encoded}`);
     }
 
     const result = {
       login: {
         account: accountId,
       },
+      consent: {}
     };
 
     await oidc.interactionFinished(req, res, result, { mergeWithLastSubmission: false });
@@ -179,22 +175,37 @@ interactionsRouter.get('/:uid/abort', setNoCache, async (req, res, next) => {
   }
 });
 
+/*expressApp.get('/',function(req, res) {
+  return res.sendFile(`./build/index.html`, { root: __dirname });
+});*/
+
+expressApp.get('/login',function(req, res) {
+  return res.sendFile(`./build/index.html`, { root: __dirname });
+});
+
+expressApp.get('/sign-up',function(req, res) {
+  return res.sendFile(`./build/index.html`, { root: __dirname });
+});
+
+expressApp.use(express.static(__dirname + '/build'));
+
 // leave the rest of the requests to be handled by oidc-provider, there's a catch all 404 there
 if (PREFIX) {
   console.log(`Using prefix: ${PREFIX}`);  
   expressApp.use(`${PREFIX}/interaction`, interactionsRouter);
+  expressApp.use(PREFIX, oidc.callback);
 } else {
   expressApp.use('/interaction', interactionsRouter);
+  expressApp.use(oidc.callback);
 }
 
-expressApp.use(oidc.callback);
 // express listen
 expressApp.listen(PORT);
 
 console.log(all_routes(expressApp));
 
 console.log('OIDC Provider starting...');
-console.log(`Test with ${URL}auth?client_id=crowds-cure-cancer&response_type=code&grant_types=authorization_code&scope=openid+email+profile&nonce=foobar&prompt=login`);
+console.log(`Test with ${URL}auth?client_id=ccc-oidc-provider&response_type=code&grant_types=authorization_code&scope=openid+email+profile&nonce=foobar&prompt=login&redirect_uri=https://cancer.crowds-cure.org`);
 console.log('Version 1.0');
 
 process.on('SIGINT', function() {

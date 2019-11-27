@@ -1,7 +1,7 @@
 import React from 'react';
 import { withFormik, Field } from 'formik';
-import { Auth } from 'aws-amplify';
 import * as Yup from 'yup';
+import queryString from 'query-string'
 import './SignUp.css';
 import ConsentFactSheet from './ConsentFactSheet.js';
 import CustomSelect from './CustomSelect.js';
@@ -9,6 +9,7 @@ import residencyProgram from './residencyProgram.js';
 import profession from './profession.js';
 import { RadioButton, RadioButtonGroup } from './Radio.js';
 import getUsername from './getUsername.js';
+import postData from './postData.js';
 
 const randomNames = [
   getUsername(),
@@ -95,18 +96,23 @@ const formikEnhancer = withFormik({
       }
     };
 
-    Auth.signUp(options).then(user => {
+    const parsed = queryString.parse(window.location.search);
+
+    console.warn(parsed);
+
+    postData(`${parsed.interactionUrl}/register`, options).then(user => {
       console.log(user)
 
       console.warn('Done! Redirect?');
 
-      window.location.href = 'https://deploy-preview-83--crowds-cure-cancer.netlify.com/'
+      //window.location.href = 'https://deploy-preview-83--crowds-cure-cancer.netlify.com/'
     }).catch(err => {
       if (err) {
         alert(`Something went wrong: ${err.message}`);
         throw new Error(err.message); 
       }
     });
+
     setSubmitting(false);
   },
   displayName: 'SignUpForm',

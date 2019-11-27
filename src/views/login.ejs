@@ -130,14 +130,14 @@
       <% if (flash) { %>
         <p><%= flash %></p>
       <% } %>
-      <form autocomplete="off" action="/interaction/<%= uid %>/login" method="post">
+      <form autocomplete="off" action="<%= interactionUrl %>/login" method="post">
         <input required type="email" name="email" placeholder="Enter an email" <% if (!params.login_hint) { %>autofocus="on"<% } else { %> value="<%= params.login_hint %>" <% } %>>
         <input required type="password" name="password" placeholder="and password" <% if (params.login_hint) { %>autofocus="on"<% } %>>
 
         <button type="submit" class="login login-submit">Sign-in</button>
       </form>
       <div class="login-help">
-        <a href="/interaction/<%= uid %>/abort">[ Cancel ]</a>
+        <a href="<%= interactionUrl %>/abort">[ Cancel ]</a>
         <% if (client.tosUri) { %>
           <a href="<%= client.tosUri %>">[ Terms of Service ]</a>
         <% } %>

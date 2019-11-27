@@ -1,8 +1,9 @@
 import React from 'react';
 import { withFormik, Field } from 'formik';
 import * as Yup from 'yup';
+import queryString from 'query-string'
 import './SignIn.css';
-import { Auth } from 'aws-amplify';
+import postData from './postData.js';
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
@@ -28,16 +29,19 @@ const formikEnhancer = withFormik({
         options.username = email;
     }
     
-    // For advanced usage
-    // You can pass an object which has the username, password and validationData which is sent to a PreAuthentication Lambda trigger
-    Auth.signIn(options).then(user => {
+    const parsed = queryString.parse(window.location.search);
+
+    console.warn(parsed);
+    console.warn(`POSTing to ${parsed.interactionUrl}/login`);
+    const url = `${parsed.interactionUrl}/login`;
+    
+    postData(url, options).then(user => {
       console.log(user)
 
       console.warn('Done! Redirect?');
 
-      window.location.href = 'https://deploy-preview-83--crowds-cure-cancer.netlify.com/'
-    })
-    .catch(err => {
+      //window.location.href = 'https://deploy-preview-83--crowds-cure-cancer.netlify.com/'
+    }).catch(err => {
       if (err) {
         alert(`Something went wrong: ${err.message}`);
         throw new Error(err.message); 

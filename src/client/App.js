@@ -4,16 +4,6 @@ import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
 import Logo from './Logo.js';
 
-// Decode utf8 characters properly
-let config = {};
-try {
-	config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));	
-} catch (error) {
-	console.error(error);
-}
-
-console.warn(JSON.stringify(config, null, 2));
-
 function getParameterByName(name) {
   var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);	
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));	
@@ -45,9 +35,9 @@ class App extends React.Component {
   renderCurrentPage() {
     const { currentPage } = this.state;
     if (currentPage === 'signup') {
-      return <SignUp config={config} togglePage={this.togglePage} />;
+      return <SignUp togglePage={this.togglePage} />;
     } else {
-      return <SignIn config={config} togglePage={this.togglePage} />;
+      return <SignIn togglePage={this.togglePage} />;
     }
   }
 
