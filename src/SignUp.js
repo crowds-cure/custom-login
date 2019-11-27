@@ -9,6 +9,7 @@ import residencyProgram from './residencyProgram.js';
 import profession from './profession.js';
 import { RadioButton, RadioButtonGroup } from './Radio.js';
 import getUsername from './getUsername.js';
+import getErrorMessage from './getErrorMessage.js';
 
 const randomNames = [
   getUsername(),
@@ -65,7 +66,7 @@ const formikEnhancer = withFormik({
     consent: false,
     username: randomNames[0] 
   }),
-  handleSubmit: (values, { props, setSubmitting }) => {
+  handleSubmit: (values, { props, setSubmitting, setFieldError }) => {
     console.log(JSON.stringify(values, null, 2));
     const { email,
       password,
@@ -118,8 +119,10 @@ const formikEnhancer = withFormik({
 
     webAuth.redirect.signupAndLogin(options, function (err) { 
       if (err) {
-        alert(`Something went wrong: ${err.message}`);
-        throw new Error(err.message); 
+        setFieldError('general', getErrorMessage(err));
+        console.error(err.message || err.description); 
+      } else {
+        window.location = 'https://cancer.crowds-cure.org/'
       }
     });
     setSubmitting(false);
@@ -129,13 +132,7 @@ const formikEnhancer = withFormik({
 });
 
 class SignUpForm extends React.Component {
-  constructor() {
-    super();
-
-    this.redirectToLogin = this.redirectToLogin.bind(this);
-  }
-
-  redirectToLogin() {
+  redirectToLogin = () => {
     this.props.togglePage('login');
   }
 
@@ -378,6 +375,14 @@ class SignUpForm extends React.Component {
     return isSubmitting || hasErrors ? 'disabled' : '' ;
   }
 
+  renderGeneralErrorMessages() {
+    const { errors } = this.props;
+    
+    if (errors['general']) {
+      return <div className="error">{errors['general']}</div>;
+    }
+  }
+
   render() {
     const { handleSubmit, isSubmitting } = this.props;
 
@@ -395,6 +400,7 @@ class SignUpForm extends React.Component {
             className={`btnSignup btn ${this.getSignupButtonDisabledClass()}`}
             disabled={isSubmitting}
           >Sign up</button>
+          {this.renderGeneralErrorMessages()}
         </form>
       </div>
     );
